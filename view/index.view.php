@@ -22,10 +22,42 @@ $price = 280;
 $both = $price + 30;
 
 if (isset($_POST['submit'])):?>
+<?php
+if (!preg_match('/([A-Za-z]{1,100})/', $_POST['name']))
+    {
+       $validation[] = "Name field can not be empty";
+    }
+    if (!preg_match('/([A-Za-z]{1,100})/', $_POST['lastName']))
+    {
+        $validation[] = "Last name field can not be empty";
+    }
+    if (!preg_match('/([A-Za-z0-9])/', $_POST['from']))
+    {
+        $validation[] = "Please select departure city";
+    }
+    if (!preg_match('/([A-Za-z0-9])/', $_POST['to']))
+    {
+        $validation[] = "Please select arrival city";
+    }
+    if (!preg_match('/([0-9]{11})/', $_POST['inputID']))
+    {
+        $validation[] = "ID format is not correct";
+    }
+    if (!preg_match('/([A-Za-z0-9])/', $_POST['luggage']))
+    {
+        $validation[] = "Please select luggage weight ";
+    }
+    if (!preg_match('/([A-Z0-9])/', $_POST['flightNum']))
+    {
+        $validation[] = "Please select flight number ";
+    }
+?>
+<?= printData($_POST); ?>
+<?php if (empty($validation)):?>
 <div class="container display w-50 p-3 mt-5 d-flex align-items-center"
  style="background-color: #1d5aea;
- height: 300px; text-align: center; border-radius: 2mm"
->
+ height: 300px; text-align: center; border-radius: 2mm">
+
     <h2><?php echo "Flight Ticket"?></h2>
     <div class="main-part d-flex .flex-column" style="height: 70%;
     width: 100%; background: #eee; border-radius: 2mm">
@@ -52,6 +84,15 @@ if (isset($_POST['submit'])):?>
         </div>
     </div>
 </div>
+<?php else:
+    {
+        foreach ($validation as $error => $show):
+            echo "<div class='card text-center text-danger'>".$show."</div>";
+        endforeach;
+    }
+
+?>
+<?php endif;?>
 <?php endif;?>
 
     <div class="container w-75 p-3 mt-5" style="background-color: #eee;">
@@ -67,7 +108,7 @@ if (isset($_POST['submit'])):?>
             <div class="col-12">
                 <label for="inputFrom" class="form-label">From</label>
                 <select id="inputFrom" class="form-select" name="from">
-                    <option selected>Choose...</option>
+                    <option selected></option>
                     <?php foreach ($from_countries as $from_country):?>
                     <option value="<?=$from_country;?>"><?=$from_country;?></option>
                     <?php endforeach;?>
@@ -76,7 +117,7 @@ if (isset($_POST['submit'])):?>
             <div class="col-12">
                 <label for="inputTo" class="form-label">To</label>
                 <select id="inputTo" class="form-select" name="to">
-                    <option selected>Choose...</option>
+                    <option selected></option>
                     <?php foreach ($to_countries as $to_country):?>
                         <option value="<?=$to_country;?>"><?=$to_country;?></option>
                     <?php endforeach;?>
@@ -89,7 +130,7 @@ if (isset($_POST['submit'])):?>
             <div class="col-md-4">
                 <label for="inputState" class="form-label">Luggage</label>
                 <select id="inputState" class="form-select" name="luggage">
-                    <option selected>Choose...</option>
+                    <option selected></option>
                     <?php foreach ($luggages as $luggage):?>
                         <option value="<?=$luggage;?>"><?=$luggage;?></option>
                     <?php endforeach;?>
@@ -98,7 +139,7 @@ if (isset($_POST['submit'])):?>
             <div class="col-md-2">
                 <label for="inputFlightNum" class="form-label">Flight Number</label>
                 <select id="inputFlightNum" class="form-select" name="flightNum">
-                    <option selected>Choose...</option>
+                    <option selected></option>
                     <?php foreach ($flights as $flight):?>
                         <option value="<?=$flight;?>"><?=$flight;?></option>
                     <?php endforeach;?>
